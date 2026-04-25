@@ -1,11 +1,16 @@
+import { useCart } from '../context/CartContext';
+
 export default function ProductCard({ name, price, isNew }) {
+  // La lógica SIEMPRE dentro de la función del componente
+  const { addToCart } = useCart();
+
   return (
     <div style={{ 
       border: '1px solid #444', 
       padding: '20px', 
       borderRadius: '12px', 
       textAlign: 'center', 
-      background: '#1a1a1a', // Fondo muy oscuro para el card
+      background: '#1a1a1a', 
       color: '#fff',
       transition: 'transform 0.2s',
       cursor: 'pointer',
@@ -20,17 +25,22 @@ export default function ProductCard({ name, price, isNew }) {
       </div>
       <h3 style={{ margin: '0 0 10px 0', fontSize: '1.1rem' }}>{name}</h3>
       <p style={{ color: '#e0cda9', fontWeight: 'bold', fontSize: '1.2rem', margin: '0 0 15px 0' }}>S/. {price}</p>
-      <button style={{ 
-        background: '#a0522d', // Tono terracota como la imagen original
-        color: '#fff', 
-        border: 'none', 
-        padding: '10px 20px', 
-        borderRadius: '6px', 
-        cursor: 'pointer', 
-        width: '100%',
-        fontWeight: 'bold',
-        fontSize: '1rem'
-      }}>
+      
+      {/* Añadimos el onClick aquí */}
+      <button 
+        onClick={() => addToCart({ name, price })}
+        style={{ 
+          background: '#a0522d', 
+          color: '#fff', 
+          border: 'none', 
+          padding: '10px 20px', 
+          borderRadius: '6px', 
+          cursor: 'pointer', 
+          width: '100%',
+          fontWeight: 'bold',
+          fontSize: '1rem'
+        }}
+      >
         Agregar al Carrito
       </button>
     </div>

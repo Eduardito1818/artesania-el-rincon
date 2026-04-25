@@ -1,10 +1,14 @@
 import { Link } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
 
 export default function Navbar() {
+  // La lógica SIEMPRE dentro de la función del componente
+  const { cartCount } = useCart();
+
   return (
     <nav style={{ 
       padding: '20px 40px', 
-      background: '#2d2d2d', // Fondo oscuro como tu captura
+      background: '#2d2d2d', 
       display: 'flex', 
       justifyContent: 'space-between', 
       alignItems: 'center',
@@ -14,7 +18,11 @@ export default function Navbar() {
       <div style={{ display: 'flex', gap: '25px', alignItems: 'center' }}>
         <Link to="/" style={{ textDecoration: 'none', color: '#fff', fontWeight: '500' }}>Inicio</Link>
         <Link to="/productos" style={{ textDecoration: 'none', color: '#fff', fontWeight: '500' }}>Productos</Link>
-        <span style={{ cursor: 'pointer', color: '#e0cda9', fontSize: '1.2rem' }}>🛒 Carrito</span>
+        
+        {/* Aquí mostramos el contador real */}
+        <span style={{ cursor: 'pointer', color: '#e0cda9', fontSize: '1.2rem' }}>
+          🛒 Carrito ({cartCount})
+        </span>
       </div>
     </nav>
   );
