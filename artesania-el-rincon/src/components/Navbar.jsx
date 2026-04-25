@@ -20,9 +20,10 @@ export default function Navbar() {
         <Link to="/productos" style={{ textDecoration: 'none', color: '#fff', fontWeight: '500' }}>Productos</Link>
         
         {/* Aquí mostramos el contador real */}
-        <span style={{ cursor: 'pointer', color: '#e0cda9', fontSize: '1.2rem' }}>
-          🛒 Carrito ({cartCount})
-        </span>
+        
+      <Link to="/carrito" style={{ textDecoration: 'none', color: '#e0cda9', fontWeight: 'bold' }}>
+        🛒 Carrito ({cartCount})
+       </Link>
       </div>
     </nav>
   );
