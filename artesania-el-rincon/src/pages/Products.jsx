@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react'; // Agregamos useEffect
 import ProductCard from '../components/ProductCard';
 import Sidebar from '../components/Sidebar';
 import AddProductForm from '../components/AddProductForm';
 
-// 1. Datos iniciales con todas las propiedades para que los filtros no fallen
 const iniciales = [
   { id: 1, name: "Jarrita de Cerámica Pintada a Mano", price: 45.00, image: "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=500&q=80", category: "Cerámica", material: "Cerámica", isNew: true },
   { id: 2, name: "Manta de Lana Tejida a Telar", price: 85.00, image: "https://images.unsplash.com/photo-1528813146034-712803b98751?auto=format&fit=crop&w=500&q=80", category: "Textiles", material: "Lana", isNew: false },
@@ -12,20 +11,26 @@ const iniciales = [
 ];
 
 export default function Products() {
-  // ESTADOS
-  const [articulos, setArticulos] = useState(iniciales);
+  // 1. INICIALIZACIÓN: Intentamos cargar lo que hay en localStorage
+  const [articulos, setArticulos] = useState(() => {
+    const datosGuardados = localStorage.getItem('rincon_artesano_db');
+    return datosGuardados ? JSON.parse(datosGuardados) : iniciales;
+  });
+
   const [showForm, setShowForm] = useState(false);
   const [activeCategory, setActiveCategory] = useState('Todas');
   const [maxPrice, setMaxPrice] = useState(1300);
   const [selectedMaterials, setSelectedMaterials] = useState([]);
 
-  // LÓGICA DE AGREGAR
+  // 2. PERSISTENCIA: Cada vez que el array 'articulos' cambie, guardamos en el navegador
+  useEffect(() => {
+    localStorage.setItem('rincon_artesano_db', JSON.stringify(articulos));
+  }, [articulos]);
+
   const agregarProducto = (nuevo) => {
-    // Al agregar, le damos un ID único y nos aseguramos que tenga material para el filtro
     setArticulos([...articulos, { ...nuevo, id: Date.now(), material: nuevo.material || "Otros" }]);
   };
 
-  // LÓGICA DE FILTRADO (Combinada con los nuevos productos)
   const filteredProducts = articulos.filter(product => {
     const matchCategory = activeCategory === 'Todas' || product.category === activeCategory;
     const matchPrice = product.price <= maxPrice;
@@ -55,19 +60,16 @@ export default function Products() {
           {activeCategory === 'Todas' ? 'Nuestro Catálogo' : activeCategory}
         </h2>
 
-        {/* BOTÓN AGREGAR */}
         <div style={{ textAlign: 'center', marginBottom: '40px' }}>
           <button onClick={() => setShowForm(true)} style={btnAdminStyle}>
             + Gestionar Inventario
           </button>
         </div>
 
-        {/* FORMULARIO MODAL */}
         {showForm && (
           <AddProductForm onAddProduct={agregarProducto} onClose={() => setShowForm(false)} />
         )}
 
-        {/* GRID DINÁMICO */}
         <div style={gridStyle}>
           {filteredProducts.length > 0 ? (
             filteredProducts.map((art) => <ProductCard key={art.id} {...art} />)

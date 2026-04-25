@@ -46,11 +46,13 @@ export default function ProductCard({ name, price, image, isNew }) {
         alignItems: 'center', 
         justifyContent: 'center' 
       }}>
-        {/* Usamos la imagen fija de prueba para asegurar que cargue */}
+        {/* CORRECCIÓN: Quitamos el link fijo y usamos la prop {image} */}
         <img 
-          src="https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=500&q=80" 
-          alt="Prueba de carga" 
+          src={image || "https://via.placeholder.com/500?text=Sin+Imagen"} 
+          alt={name} 
           style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+          // Manejo de error si el link está roto
+          onError={(e) => e.target.src = "https://via.placeholder.com/500?text=Error+de+Carga"}
         />
       </div>
 
